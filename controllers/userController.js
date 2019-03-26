@@ -1,5 +1,7 @@
 const User = require('../models/User.js');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const fs = require("fs");
 module.exports = {
     addUser: function(req, res) {
         const user = new User({
@@ -9,6 +11,15 @@ module.exports = {
         user.save()
             .then(doc => {
                 res.status(200).json(doc);
+                fs.readFile("./seeders/users.json", "utf8", function(err, data) {
+                    if (err) console.log(err);
+                    let users = JSON.parse(data);
+                    doc.password = 
+                    users.push(JSON.stringify(doc));
+                    fs.writeFile("./seeders/users.json", JSON.stringify(users), function(err, data) {
+                        if (err) console.log(err);
+                    });
+                });
             })
             .catch(err => {
                 console.log(err);
@@ -31,7 +42,7 @@ module.exports = {
                             _id: doc._id,
                             request: {
                                 type: `GET`,
-                                url: `http://localhost:${process.env.PORT}/user/${doc._id}`,
+                                url: `${req.protocol}://${req.get('host')}/user/${doc._id﻿}`,
                             }
                         };
                     })
@@ -85,6 +96,28 @@ module.exports = {
                     error: err
                 });
             });
-
+    },
+    updatedUser: function(req, res) {
+        const props = req.body;
+        if (props.password) props.password = bcrypt.hashSync(props.password, 10);
+        User.updateOne({ _id: req.params.id }, props)
+            .exec()
+            .then(doc => {
+                res.status(200).json({
+                    name: doc.name,
+                    email: doc.email,
+                    _id: doc._id,
+                    request: {
+                        type: 'GET',
+                        url: `${req.protocol}://${req.get('host')}/user/${doc._id﻿}`,
+                    }
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            });
     },
 };

@@ -10,7 +10,7 @@ const userScheme = new Schema({
     password: {
         type: String,
         required: true,
-        validate: textValidator,
+        //validate: textValidator,
     },
     email: {
         type: String,
