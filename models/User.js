@@ -10,7 +10,7 @@ const userScheme = new Schema({
     password: {
         type: String,
         required: true,
-        //validate: textValidator,
+        validate: textValidator,
     },
     email: {
         type: String,
@@ -24,6 +24,11 @@ const userScheme = new Schema({
         required: true,
         validate: textValidator,
     },
+    rating: {
+       type: Number,
+       default: Math.floor(Math.random() * (50000 - 0)) + 0,
+    },
+
 }, { versionKey: false });
 
 userScheme.plugin(uniqueValidator);

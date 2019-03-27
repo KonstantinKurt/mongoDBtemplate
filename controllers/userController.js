@@ -10,7 +10,7 @@ module.exports = {
         });
         user.save()
             .then(doc => {
-                res.status(200).json(doc);
+                res.status(201).json(doc);
                 fs.readFile("./seeders/users.json", "utf8", function(err, data) {
                     if (err) console.log(err);
                     let users = JSON.parse(data);
@@ -112,6 +112,22 @@ module.exports = {
                         url: `${req.protocol}://${req.get('host')}/user/${doc._id﻿}`,
                     }
                 });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            });
+    },
+    changeRating: function(req, res) {
+        const coff  = req.body.coff;
+        if(isNaN(coff)) 
+         return res.status(400).json({message: "coff shold be a number!"}); 
+        User.updateMany({}, {rating:coff})
+            .exec()
+            .then(docs => {
+                res.status(200).json({message: "All users rating updated coorectly!"});
             })
             .catch(err => {
                 console.log(err);
