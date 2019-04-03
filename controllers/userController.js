@@ -8,6 +8,7 @@ module.exports = {
             _id: new mongoose.Types.ObjectId(),
             ...req.body
         });
+        //method save() uses Promise by default;
         user.save()
             .then(doc => {
                 res.status(201).json(doc);
@@ -29,6 +30,7 @@ module.exports = {
             })
     },
     getUsers: function(req, res) {
+       // Query methouds should call Promise;  
         User.find()
             .select("name email")
             .exec()
@@ -124,16 +126,18 @@ module.exports = {
         const coff  = req.body.coff;
         if(isNaN(coff)) 
          return res.status(400).json({message: "coff shold be a number!"}); 
-        User.updateMany({}, {rating:coff})
-            .exec()
-            .then(docs => {
-                res.status(200).json({message: "All users rating updated coorectly!"});
-            })
-            .catch(err => {
-                console.log(err);
-                res.status(500).json({
-                    error: err
-                });
-            });
+        // User.updateMany({}, {rating:coff})
+        //     .exec()
+        //     .then(docs => {
+
+        //         res.status(200).json({message: "All users rating updated coorectly!"});
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //         res.status(500).json({
+        //             error: err
+        //         });
+        //     });
+        
     },
 };
