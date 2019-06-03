@@ -7,7 +7,10 @@ const User = require('../models/User.js');
 before((done) => {
     mongoose.connect('mongodb://localhost/test');
     mongoose.connection
-        .once('open', () => {console.log('Connected!'); done();})
+        .once('open', () => {
+            console.log('Connected!');
+            done();
+        })
         .on('error', (error) => {
             console.warn('Error : ', error);
         });
@@ -25,12 +28,27 @@ describe("Creating User", () => {
         const user = new User({
             name: "Test",
             password: "testPassword",
-            email: "testEmail@gmail.com"
+            email: "testEmail@gmail.com",
+            rating: 0
         });
         user.save()
-            .then(() => {
+            .then((user) => {
                 assert(!user.isNew);
+                console.log(user);
                 done();
             });
-    })
-})
+    });
+    it("Increment users rating by value", (done) => {
+        User.updateOne({name: "Test"}, {$inc: {rating: 1}}, {new: true})
+            .exec()
+            .then((user) => {
+               console.log(user);
+                done();
+            })
+
+    });
+
+
+});
+
+

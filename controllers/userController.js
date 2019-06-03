@@ -126,18 +126,18 @@ module.exports = {
         const coff  = req.body.coff;
         if(isNaN(coff)) 
          return res.status(400).json({message: "coff shold be a number!"}); 
-        // User.updateMany({}, {rating:coff})
-        //     .exec()
-        //     .then(docs => {
+        User.updateMany({}, {$inc: {rating:coff}},{new: true})
+            .exec()
+            .then(docs => {
 
-        //         res.status(200).json({message: "All users rating updated coorectly!"});
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //         res.status(500).json({
-        //             error: err
-        //         });
-        //     });
+                res.status(200).json({message: "All users rating updated correctly!", data : docs});
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            });
         
     },
 };
