@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const fs = require("fs");
 module.exports = {
-    addUser: function(req, res) {
+    addUser: function (req, res) {
         const user = new User({
             _id: new mongoose.Types.ObjectId(),
             ...req.body
@@ -12,12 +12,12 @@ module.exports = {
         user.save()
             .then(doc => {
                 res.status(201).json(doc);
-                fs.readFile("./seeders/users.json", "utf8", function(err, data) {
+                fs.readFile("./seeders/users.json", "utf8", function (err, data) {
                     if (err) console.log(err);
                     let users = JSON.parse(data);
-                    doc.password = 
-                    users.push(JSON.stringify(doc));
-                    fs.writeFile("./seeders/users.json", JSON.stringify(users), function(err, data) {
+                    doc.password =
+                        users.push(JSON.stringify(doc));
+                    fs.writeFile("./seeders/users.json", JSON.stringify(users), function (err, data) {
                         if (err) console.log(err);
                     });
                 });
@@ -29,8 +29,8 @@ module.exports = {
                 });
             })
     },
-    getUsers: function(req, res) {
-       // Query methouds should call Promise;  
+    getUsers: function (req, res) {
+        // Query methouds should call Promise;
         User.find()
             .select("name email")
             .exec()
@@ -65,8 +65,8 @@ module.exports = {
             });
 
     },
-    getUser: function(req, res) {
-        User.find({ _id: req.params.id })
+    getUser: function (req, res) {
+        User.find({_id: req.params.id})
             .select("name email")
             .exec()
             .then(doc => {
@@ -86,8 +86,8 @@ module.exports = {
             });
 
     },
-    deleteUser: function(req, res) {
-        User.deleteOne({ _id: req.params.id })
+    deleteUser: function (req, res) {
+        User.deleteOne({_id: req.params.id})
             .exec()
             .then(doc => {
                 res.status(200).json(doc);
@@ -99,10 +99,10 @@ module.exports = {
                 });
             });
     },
-    updatedUser: function(req, res) {
+    updatedUser: function (req, res) {
         const props = req.body;
         if (props.password) props.password = bcrypt.hashSync(props.password, 10);
-        User.updateOne({ _id: req.params.id }, props)
+        User.updateOne({_id: req.params.id}, props)
             .exec()
             .then(doc => {
                 res.status(200).json({
@@ -122,15 +122,17 @@ module.exports = {
                 });
             });
     },
-    changeRating: function(req, res) {
-        const coff  = req.body.coff;
-        if(isNaN(coff)) 
-         return res.status(400).json({message: "coff shold be a number!"}); 
-        User.updateMany({}, {$inc: {rating:coff}},{new: true})
+
+    // Update operators
+    changeRating: function (req, res) {
+        const coff = req.body.coff;
+        if (isNaN(coff))
+            return res.status(400).json({message: "coff shold be a number!"});
+        User.updateMany({}, {$inc: {rating: coff}}, {new: true})
             .exec()
             .then(docs => {
 
-                res.status(200).json({message: "All users rating updated correctly!", data : docs});
+                res.status(200).json({message: "All users rating updated correctly!", data: docs});
             })
             .catch(err => {
                 console.log(err);
@@ -138,6 +140,35 @@ module.exports = {
                     error: err
                 });
             });
-        
+
     },
+    addPostSchema: function (req, res) {
+        User.findOneAndUpdate({_id: req.params.usersId},
+            {$push: {posts: {body: req.body.postBody}}},
+            {new: true})
+            .then(doc => {
+                res.status(200).json(doc.posts);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
+    deletePostSchemaByValue: function (req, res) {
+        User.findOneAndUpdate({_id: req.params.usersId},
+            {$pull: {posts: {$elementMatch: {body: req.body.postBody}}}})
+            .then(doc => {
+                res.status(200).json(doc);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
+
+
 };

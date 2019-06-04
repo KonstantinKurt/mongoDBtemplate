@@ -9,6 +9,7 @@ router.patch('/user/:id', userController.updatedUser); // update User by _id:
 router.get('/users', userController.getUsers); // get all Users from db;
 router.get('/user/:id', userController.getUser); // get User from db by _id;
 router.patch('/users', userController.changeRating); // changes rating to all Users by the coff, which indicates by req.param;
-
+router.post('/user/:usersId', userController.addPostSchema); //add postSchema to user post array;
+router.delete('/user/post/:usersId', userController.deletePostSchemaByValue); // deletes users post from array by its value;
 
 module.exports = router;
