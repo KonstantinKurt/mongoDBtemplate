@@ -23,14 +23,13 @@ module.exports = {
                 });
             })
             .catch(err => {
-                console.log(err);
                 res.status(500).json({
-                    errors: err,
+                    errors: err.message,
                 });
             })
     },
     getUsers: function (req, res) {
-        // Query methouds should call Promise;
+        // Query methods should call Promise;
         User.find()
             .select("name email")
             .exec()
@@ -60,28 +59,24 @@ module.exports = {
             .catch(err => {
                 console.log(err);
                 res.status(500).json({
-                    error: err
+                    errors: err.message,
                 });
             });
 
     },
     getUser: function (req, res) {
-        User.find({_id: req.params.id})
+        User.findOne({_id: req.params.usersId})
             .select("name email")
             .exec()
             .then(doc => {
-                if (doc.length > 0) {
+
                     res.status(200).json(doc);
-                } else {
-                    res.status(404).json({
-                        message: 'User not found',
-                    });
-                }
+
             })
             .catch(err => {
                 console.log(err);
                 res.status(500).json({
-                    error: err
+                    errors: err.message,
                 });
             });
 
@@ -95,7 +90,7 @@ module.exports = {
             .catch(err => {
                 console.log(err);
                 res.status(500).json({
-                    error: err
+                    errors: err.message,
                 });
             });
     },
@@ -118,7 +113,7 @@ module.exports = {
             .catch(err => {
                 console.log(err);
                 res.status(500).json({
-                    error: err
+                    errors: err.message,
                 });
             });
     },
@@ -137,7 +132,7 @@ module.exports = {
             .catch(err => {
                 console.log(err);
                 res.status(500).json({
-                    error: err
+                    errors: err.message,
                 });
             });
 
@@ -169,6 +164,56 @@ module.exports = {
                 });
             });
     },
-
+    getAllUsersArticle: function (req, res) {
+        User.findOne({_id: req.params.usersId})
+            .populate('articles')
+            .then(doc => {
+                res.status(200).json(doc.articles);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
+    getAllUsersArticleWithComments: function (req, res) {
+        User.findOne({_id: req.params.usersId})
+            .populate({
+                path:'articles',
+                populate:{
+                    path: 'comments',
+                    //model:'Comment'
+                    populate: {
+                        path: 'author',
+                        //model:'User'
+                    }
+                }
+            })
+            .then(doc => {
+                res.status(200).json(doc);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
+    removeWithArticles: function (req, res) {
+        User.findOne({_id: req.params.usersId})
+            .then(doc => {
+                doc.remove()
+                    .then(result=>{
+                        res.status(200).json(result);
+                    });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
 
 };

@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const uniqueValidator = require('mongoose-unique-validator');
 const validator = require('../libs/validators.js');
 const postSchema = require('./postScheme.js');
+const Article = require('../models/Article.js');
+
 
 let textValidator = [validator.alphaValidator, validator.nameValidator];
 
@@ -12,6 +14,7 @@ const userScheme = new Schema({
         type: String,
         required: true,
         validate: textValidator,
+        select: false
     },
     email: {
         type: String,
@@ -31,13 +34,17 @@ const userScheme = new Schema({
     },
     posts: {
         type: [postSchema],
-        default:[]
+        default: []
     },
+    articles: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Article"
+    }],
 
 }, {versionKey: false});
 
-userScheme.virtual('postCount').get(()=>{   //virtual schema property;
-   return this.post.length;
+userScheme.virtual('postCount').get(() => {   //virtual schema property;
+    return this.post.length;
 });
 userScheme.plugin(uniqueValidator);
 
@@ -46,4 +53,10 @@ userScheme.pre('save', function (next) {
     next();
 });
 
+userScheme.pre('remove',  function(next)  {              // middleware will remove all users articles, if user instance will be deleted;
+
+    mongoose.model('Article').deleteMany({_id: {$in: this.articles}})
+        .then(()=>next());
+
+});
 module.exports = mongoose.model('User', userScheme);

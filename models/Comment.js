@@ -3,12 +3,7 @@ const Schema = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator');
 
 
-const articleSchema = new Schema({
-    title: {
-        type: String,
-        unique: true,
-        required: true,
-    },
+const commentSchema = new Schema({
     content: {
         type: String,
         required: true,
@@ -16,16 +11,16 @@ const articleSchema = new Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required:true
     },
-    comments: [{
+    article: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment',
-        default:[]
-    }]
+        ref: 'Article',
+        required: true
+    }
 
 }, {versionKey: false});
 
-articleSchema.plugin(uniqueValidator);
+commentSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('Article', articleSchema);
+module.exports = mongoose.model('Comment', commentSchema);
