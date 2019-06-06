@@ -14,5 +14,6 @@ router.delete('/user/post/:usersId', userController.deletePostSchemaByValue); //
 router.get("/user/articles/:usersId", userController.getAllUsersArticle); //populates all users articles;
 router.get("/user/articles/comments/:usersId", userController.getAllUsersArticleWithComments); //populates all users articles with comments (deeply nested associations);
 router.delete("/user/nested/:usersId", userController.removeWithArticles); //Remove user with nested articles;
+router.get("/user/skip", userController.skipAndLimit); // skip and limit just for test;
 
 module.exports = router;

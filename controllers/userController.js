@@ -215,5 +215,19 @@ module.exports = {
                 });
             });
     },
+    skipAndLimit: function (req, res) {
+        User.find({})
+            .skip(1)
+            .limit(2)
+            .then(docs => {
+
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
 
 };

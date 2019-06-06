@@ -22,7 +22,10 @@ const articleSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment',
         default:[]
-    }]
+    }],
+    createdDate:{
+      type: Date
+    },
 
 }, {versionKey: false});
 

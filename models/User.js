@@ -40,6 +40,10 @@ const userScheme = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Article"
     }],
+    premium:{
+        type: Boolean,
+        default: false
+    }
 
 }, {versionKey: false});
 
