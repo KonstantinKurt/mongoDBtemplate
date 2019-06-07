@@ -38,7 +38,8 @@ const userScheme = new Schema({
     },
     articles: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Article"
+        ref: "Article",
+        default:[]
     }],
     premium:{
         type: Boolean,
