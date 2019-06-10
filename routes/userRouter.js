@@ -13,7 +13,10 @@ router.post('/user/:usersId', userController.addPostSchema); //add postSchema to
 router.delete('/user/post/:usersId', userController.deletePostSchemaByValue); // deletes users post from array by its value;
 router.get("/user/articles/:usersId", userController.getAllUsersArticle); //populates all users articles;
 router.get("/user/articles/comments/:usersId", userController.getAllUsersArticleWithComments); //populates all users articles with comments (deeply nested associations);
-router.delete("/user/nested/:usersId", userController.removeWithArticles); //Remove user with nested articles;
+router.delete("/user/nested/:usersId", userController.removeWithArticles); //Remove user with nested articles by model middleware;
 router.get("/user/skip", userController.skipAndLimit); // skip and limit just for test;
+router.get("/users/sort/:sortProperty", userController.sortByProperty); //sorts users by given property;
+router.get("/users/where", userController.getUsersByRatingInterval); // Query for users by rating interval with query builder;
+router.get("/users/where/json", userController.getUsersByRatingIntervalWithJSON); // Query for users by rating interval with JSON;
 
 module.exports = router;

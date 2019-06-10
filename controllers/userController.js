@@ -141,6 +141,7 @@ module.exports = {
         User.findOneAndUpdate({_id: req.params.usersId},
             {$push: {posts: {body: req.body.postBody}}},
             {new: true})
+            .exec()
             .then(doc => {
                 res.status(200).json(doc.posts);
             })
@@ -154,6 +155,7 @@ module.exports = {
     deletePostSchemaByValue: function (req, res) {
         User.findOneAndUpdate({_id: req.params.usersId},
             {$pull: {posts: {$elementMatch: {body: req.body.postBody}}}})
+            .exec()
             .then(doc => {
                 res.status(200).json(doc);
             })
@@ -167,6 +169,7 @@ module.exports = {
     getAllUsersArticle: function (req, res) {
         User.findOne({_id: req.params.usersId})
             .populate('articles')
+            .exec()
             .then(doc => {
                 res.status(200).json(doc.articles);
             })
@@ -190,6 +193,7 @@ module.exports = {
                     }
                 }
             })
+            .exec()
             .then(doc => {
                 res.status(200).json(doc);
             })
@@ -202,6 +206,7 @@ module.exports = {
     },
     removeWithArticles: function (req, res) {
         User.findOne({_id: req.params.usersId})
+            .exec()
             .then(doc => {
                 doc.remove()
                     .then(result=>{
@@ -219,8 +224,59 @@ module.exports = {
         User.find({})
             .skip(1)
             .limit(2)
+            .exec()
             .then(docs => {
 
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
+    sortByProperty: function (req, res) {
+        const sortProperty = req.params.sortProperty;
+        User.find({})
+            .sort({[sortProperty]: 1})
+            .exec()
+            .then(docs => {
+                res.status(200).json({data: docs});
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
+    getUsersByRatingInterval: function (req, res) {
+        const from = req.body.from;
+        const to = req.body.to;
+        User.find({})
+            .where('rating').gte(from).lte(to)
+            .sort({rating: -1})
+            .select('name rating')
+            .exec()
+            .then(docs => {
+                res.status(200).json({data: docs});
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
+    getUsersByRatingIntervalWithJSON: function (req, res) {
+        const from = req.body.from;
+        const to = req.body.to;
+        User.find({rating:{$gte: from, $lte: to}})
+            .select('name rating')
+            .sort({rating: -1})
+            .exec()
+            .then(docs => {
+                res.status(200).json({data: docs});
             })
             .catch(err => {
                 console.log(err);
