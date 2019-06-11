@@ -25,7 +25,6 @@ const userScheme = new Schema({
         type: String,
         unique: true,
         required: true,
-        validate: textValidator,
     },
     rating: {
         type: Number,
@@ -38,17 +37,25 @@ const userScheme = new Schema({
     articles: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Article",
-        default:[]
+        default: []
     }],
-    premium:{
+    premium: {
         type: Boolean,
         default: false
     }
 
 }, {versionKey: false});
+userScheme.index({name: 'text', email: 'text'},
+    {default_language: 'none'});
+//userScheme.index({'$**': 'text'});
 
 userScheme.virtual('postCount').get(() => {   //virtual schema property;
     return this.post.length;
+});
+userScheme.virtual('nameMethod').get( () => {  //getter and setter for Schema properties (name);
+    return this.name;
+}).set( (newName) => {
+    this.name = newName;
 });
 userScheme.plugin(uniqueValidator);
 
@@ -57,10 +64,12 @@ userScheme.pre('save', function (next) {
     next();
 });
 
-userScheme.pre('remove',  function(next)  {              // middleware will remove all users articles, if user instance will be deleted;
+
+userScheme.pre('remove', function (next) {              // middleware will remove all users articles, if user instance will be deleted;
 
     mongoose.model('Article').deleteMany({_id: {$in: this.articles}})
-        .then(()=>next());
+        .then(() => next());
 
 });
+
 module.exports = mongoose.model('User', userScheme);

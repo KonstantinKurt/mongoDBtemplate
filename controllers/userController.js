@@ -70,7 +70,7 @@ module.exports = {
             .exec()
             .then(doc => {
 
-                    res.status(200).json(doc);
+                res.status(200).json(doc);
 
             })
             .catch(err => {
@@ -122,7 +122,7 @@ module.exports = {
     changeRating: function (req, res) {
         const coff = req.body.coff;
         if (isNaN(coff))
-            return res.status(400).json({message: "coff shold be a number!"});
+            return res.status(400).json({message: "coff should be a number!"});
         User.updateMany({}, {$inc: {rating: coff}}, {new: true})
             .exec()
             .then(docs => {
@@ -183,8 +183,8 @@ module.exports = {
     getAllUsersArticleWithComments: function (req, res) {
         User.findOne({_id: req.params.usersId})
             .populate({
-                path:'articles',
-                populate:{
+                path: 'articles',
+                populate: {
                     path: 'comments',
                     //model:'Comment'
                     populate: {
@@ -209,7 +209,7 @@ module.exports = {
             .exec()
             .then(doc => {
                 doc.remove()
-                    .then(result=>{
+                    .then(result => {
                         res.status(200).json(result);
                     });
             })
@@ -273,7 +273,7 @@ module.exports = {
     getUsersByRatingIntervalWithJSON: function (req, res) {
         const from = req.body.from;
         const to = req.body.to;
-        User.find({rating:{$gte: from, $lte: to}})
+        User.find({rating: {$gte: from, $lte: to}})
             .select('name rating')
             .sort({rating: -1})
             .exec()
@@ -285,6 +285,65 @@ module.exports = {
             .catch(err => {
                 console.log(err);
                 res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
+    getUserByNameWithTextQuery: function (req, res) {
+        const text = req.params.text;
+        User.find({$text: {$search: text, $caseSensitive: false}})
+            .select('_id name')
+            .exec()
+            .then(docs => {
+                res
+                    .status(200)
+                    .json({data: docs});
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err.message
+                });
+            });
+    },
+    updateMultipleUsersRating: function (req, res) {
+        const coff = req.body.coff;
+        if (isNaN(coff))
+            return res.status(400).json({message: "coff should be a number!"});
+        const usersToUpdate = req.body.usersToUpdate;
+        User.updateMany({_id: {$in: usersToUpdate}},
+            {$inc: {rating: coff}},
+            {new: true})
+            .exec()
+            .then(docs => {
+                res
+                    .status(200)
+                    .json({message: "Users rating updated successfully!", data: docs});
+            })
+            .catch(err => {
+                res
+                    .status(500).json({
+                    error: err.message
+                });
+            });
+    },
+    updateMultipleUsersRatingByMultipleOperator: function (req, res) {
+        const coff = req.body.coff;
+        if (isNaN(coff))
+            return res.status(400).json({message: "coff should be a number!"});
+        const usersToUpdate = req.body.usersToUpdate;
+        User.update({_id: {$in: usersToUpdate}},
+            {$inc: {rating: coff}},
+            {multi: true})
+            .exec()
+            .then(docs => {
+                res
+                    .status(200)
+                    .json({message: "Users rating updated successfully!", data: docs});
+            })
+            .catch(err => {
+                res
+                    .status(500).json({
                     error: err.message
                 });
             });
