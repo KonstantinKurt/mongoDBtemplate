@@ -21,6 +21,6 @@ router.get("/users/where/json", userController.getUsersByRatingIntervalWithJSON)
 router.get("/users/text/:text", userController.getUserByNameWithTextQuery); // Query to get user with $text operator;
 router.patch("/users/multiple", userController.updateMultipleUsersRating); // Update multiple users rating ($in, updateMany);
 router.patch("/users/multiple/operator", userController.updateMultipleUsersRatingByMultipleOperator); // Update multiple users rating ($in, update, multiple:true);
-
+router.patch("/users/multiple/array", userController.updateMultipleUsersRatingReturnObjectsArray); //  Update multiple users rating, return obj arr (promise all);
 
 module.exports = router;

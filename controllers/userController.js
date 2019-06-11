@@ -348,5 +348,31 @@ module.exports = {
                 });
             });
     },
+    updateMultipleUsersRatingReturnObjectsArray: function (req, res) {
+        const coff = req.body.coff;
+        if (isNaN(coff))
+            return res.status(400).json({message: "coff should be a number!"});
+        const usersToUpdate = req.body.usersToUpdate;
+        Promise
+            .all([
+                User.updateMany({_id: {$in: usersToUpdate}},
+                    {$inc: {rating: coff}},
+                    {new: true})
+                    .exec(),
+                User.find({_id: {$in: usersToUpdate}})
+                    .select("_id name ")
+                    .exec()
+            ])
+            .then(results=> {
+                  res.status(200).json({message: "Users rating updated successfully!", data: results[1]})
+            })
+            .catch(err=>{
+                res
+                    .status(500).json({
+                    error: err.message
+                });
+            });
+        },
+
 
 };
