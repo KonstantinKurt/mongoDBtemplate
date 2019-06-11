@@ -16,7 +16,7 @@ router.get("/user/articles/comments/:usersId", userController.getAllUsersArticle
 router.delete("/user/nested/:usersId", userController.removeWithArticles); //Remove user with nested articles by model middleware;
 router.get("/user/skip", userController.skipAndLimit); // skip and limit just for test;
 router.get("/users/sort/:sortProperty", userController.sortByProperty); //sorts users by given property;
-router.get("/users/where", userController.getUsersByRatingInterval); // Query for users by rating interval with query builder;
+router.get("/users/where", userController.getUsersByRatingInterval); // Query for getting users by rating interval with query builder;
 router.get("/users/where/json", userController.getUsersByRatingIntervalWithJSON); // Query for users by rating interval with JSON;
 
 module.exports = router;

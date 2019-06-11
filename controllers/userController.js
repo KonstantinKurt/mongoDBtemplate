@@ -259,7 +259,9 @@ module.exports = {
             .select('name rating')
             .exec()
             .then(docs => {
-                res.status(200).json({data: docs});
+                res
+                    .status(200)
+                    .json({data: docs});
             })
             .catch(err => {
                 console.log(err);
@@ -276,7 +278,9 @@ module.exports = {
             .sort({rating: -1})
             .exec()
             .then(docs => {
-                res.status(200).json({data: docs});
+                res
+                    .status(200)
+                    .json({data: docs});
             })
             .catch(err => {
                 console.log(err);

@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const uniqueValidator = require('mongoose-unique-validator');
 const validator = require('../libs/validators.js');
 const postSchema = require('./postScheme.js');
-const Article = require('../models/Article.js');
 
 
 let textValidator = [validator.alphaValidator, validator.nameValidator];

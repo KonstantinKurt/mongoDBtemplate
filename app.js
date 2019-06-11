@@ -8,7 +8,7 @@ const connectDB = require('./connections/localMongoConnection.js');
 const userRouter = require('./routes/userRouter.js');
 const articleRouter = require('./routes/articleRouter.js');
 const commentRouter = require('./routes/commentRouter.js');
-
+const inheritDiscriminatorRoutes = require('./routes/inheritDiscriminatorRoutes.js');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -18,7 +18,7 @@ app.use('/images', express.static(__dirname + '/images'));
 app.use('/', userRouter);
 app.use('/', articleRouter);
 app.use('/', commentRouter);
-
+app.use('/', inheritDiscriminatorRoutes);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server runs on http://localhost:'  ${process.env.PORT}  '; Ctrl+C for exit `);
