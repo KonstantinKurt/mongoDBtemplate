@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const uniqueValidator = require('mongoose-unique-validator');
 const validator = require('../libs/validators.js');
 const postSchema = require('./postScheme.js');
+const locationSchema = require('./locationScheme.js');
+
 
 
 let textValidator = [validator.alphaValidator, validator.nameValidator];
@@ -42,6 +44,10 @@ const userScheme = new Schema({
     premium: {
         type: Boolean,
         default: false
+    },
+    location: {
+        type: locationSchema,
+        default: null
     }
 
 }, {versionKey: false});

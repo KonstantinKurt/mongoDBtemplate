@@ -1,7 +1,10 @@
 const User = require('../models/User.js');
+const locationSchema = require('../models/locationScheme.js');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const fs = require("fs");
+
+
 module.exports = {
     addUser: function (req, res) {
         const user = new User({
@@ -363,16 +366,36 @@ module.exports = {
                     .select("_id name ")
                     .exec()
             ])
-            .then(results=> {
-                  res.status(200).json({message: "Users rating updated successfully!", data: results[1]})
+            .then(results => {
+                res.status(200).json({message: "Users rating updated successfully!", data: results[1]})
             })
-            .catch(err=>{
+            .catch(err => {
                 res
                     .status(500).json({
                     error: err.message
                 });
             });
-        },
+    },
+    addLocationSchema: function (req, res) {
+        const location = {
+            coordinates: [req.body.latitude, req.body.longitude]
+        };
+        User.update({_id: req.params.usersId},
+            {location: location})
+            .exec()
+            .then(doc => {
+                res
+                    .status(200)
+                    .json({message: "Users location updated successfully!", data: doc});
+            })
+            .catch(err => {
+                res
+                    .status(500).json({
+                    error: err.message
+                });
+            });
+
+    },
 
 
 };

@@ -22,5 +22,6 @@ router.get("/users/text/:text", userController.getUserByNameWithTextQuery); // Q
 router.patch("/users/multiple", userController.updateMultipleUsersRating); // Update multiple users rating ($in, updateMany);
 router.patch("/users/multiple/operator", userController.updateMultipleUsersRatingByMultipleOperator); // Update multiple users rating ($in, update, multiple:true);
 router.patch("/users/multiple/array", userController.updateMultipleUsersRatingReturnObjectsArray); //  Update multiple users rating, return obj arr (promise all);
+router.patch("/users/location/add/:usersId", userController.addLocationSchema); // Adds geolocation schema to user;
 
 module.exports = router;
