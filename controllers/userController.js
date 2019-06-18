@@ -396,6 +396,27 @@ module.exports = {
             });
 
     },
+    getNearObject: function (req, res) {
+        const longitude = req.body.longitude;
+        const latitude  = req.body.latitude;
 
+        User.aggregate[
+            {type: 'Point', coordinates: [parseFloat(longitude), parseFloat(latitude)]},
+            {spherical: true, maxDistance: 200000 }
+        ]
+            .then(users=>{
+                res
+                    .status(200)
+                    .json({message: 'Users near location:', data: users})
+            })
+            .catch(err=>{
+                res
+                    .status(500)
+                    .json({
+                        error: err.message
+                    })
+            })
+
+    },
 
 };
