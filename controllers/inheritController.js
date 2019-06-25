@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
 const Parent = require('../models/Parent.js');
 const Kid = require('../models/Kid.js');
