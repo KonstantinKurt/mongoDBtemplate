@@ -22,9 +22,9 @@ function exit() {
             if (err) {
                 console.log(err);
             }
-            let users = JSON.parse(data);
+            const users = JSON.parse(data);
             for (let i = 0; i < users.length; i++) {
-                let user = new User(JSON.parse(users[i]));
+                const user = new User(JSON.parse(users[i]));
                 console.log(user);
                 user.save();
             }

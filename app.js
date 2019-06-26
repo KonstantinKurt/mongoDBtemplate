@@ -25,9 +25,11 @@ app.use('/', commentRouter);
 app.use('/', inheritDiscriminatorRoutes);
 app.use('/aggregation', aggregationRouter);
 
+app.get("/",(req,res)=>{
+    res.send(`mongoDBtemplate`);
+});
 
-
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, `0.0.0.0`,() => {
     console.log(`Server runs on http://localhost:'  ${process.env.PORT}  '; Ctrl+C for exit `);
     connectDB();
 });

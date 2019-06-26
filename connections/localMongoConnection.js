@@ -8,7 +8,7 @@ const options = {
 module.exports = function () {
     mongoose.connect(process.env.DB_CONN,
         options,
-        function(err)  {
+        (err) =>  {
         err && console.log(err);
         console.log('Database connected successfully!');
     });
