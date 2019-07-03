@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "app-root-path": "^2.2.1",
     "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.3",
     "cors": "^2.8.5",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
@@ -19,7 +21,10 @@
     "mongoose": "^5.4.20",
     "mongoose-unique-validator": "^2.0.2",
     "mongoose-validator": "^2.1.0",
-    "swagger-ui-express": "^4.0.6"
+    "morgan": "^1.9.1",
+    "puppeteer": "^1.18.0",
+    "swagger-ui-express": "^4.0.6",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "faker": "^4.1.0",

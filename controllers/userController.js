@@ -59,12 +59,12 @@ module.exports = {
                     });
                 }
             })
-            .catch(err => {
-                console.log(err);
-                res.status(500).json({
-                    errors: err.message,
-                });
-            });
+            // .catch(err => {
+            //     console.log(err);
+            //     res.status(500).json({
+            //         errors: err.message,
+            //     });
+            // });
 
     },
     getUser: function (req, res) {

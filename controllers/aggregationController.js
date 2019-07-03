@@ -116,9 +116,9 @@ module.exports = {
         User.aggregate([
             {
                 $project: {
-                    _id: false,
-                    user_data: "$name",
-                    //articles: true
+                    //_id: false,
+                    //user_data: "$name",
+                    articles: true
                 }
             },
             {
@@ -148,15 +148,15 @@ module.exports = {
                         as: 'Users_articles'
                     }
             },
-            {
-                $unwind: '$Users_articles'
-            },
-            {
-                $project:
-                    {
-                        _id: false,
-                    }
-            }
+            // {
+            //     $unwind: '$Users_articles'
+            // },
+            // {
+            //     $project:
+            //         {
+            //             _id: false,
+            //         }
+            // }
         ])
             .exec()
             .then(users => {

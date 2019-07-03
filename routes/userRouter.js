@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const userController = require('../controllers/userController.js'); 
+const userController = require('../controllers/userController.js');
 
 router.post('/user', userController.addUser); // add User to db;
 router.delete('/user/:id', userController.deleteUser); // delete User by _id;

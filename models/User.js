@@ -2,26 +2,19 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 const uniqueValidator = require('mongoose-unique-validator');
-const validator = require('../libs/validators.js');
 const postSchema = require('./postScheme.js');
 const locationSchema = require('./locationScheme.js');
-
-
-
-let textValidator = [validator.alphaValidator, validator.nameValidator];
 
 const userScheme = new Schema({
     password: {
         type: String,
         required: true,
-        validate: textValidator,
         select: false
     },
     email: {
         type: String,
         unique: true,
         required: true,
-        validate: validator.emailValidator,
     },
     name: {
         type: String,
